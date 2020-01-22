@@ -1,5 +1,6 @@
 package org.personal.myStore.core.ui.driver;
 
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.personal.myStore.core.Environment;
@@ -21,7 +22,7 @@ public class DriverManager {
     private DriverManager() {
         String browser = Environment.getInstance().getValue("$['local']['browser']").toUpperCase();
         driver = DriverFactory.getDriverManager(DriverType.valueOf(browser));
-        driver.manage().window().maximize();
+        driver.manage().window().setSize(new Dimension(1200,768));
         wait = new WebDriverWait(driver, TIME_OUT_IN_SECONDS);
         driver.get("http://automationpractice.com/index.php");
     }

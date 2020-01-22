@@ -7,6 +7,8 @@ import org.personal.myStore.core.pages.BestSellersPage;
 import org.personal.myStore.core.pages.CartSummaryPage;
 import org.personal.myStore.core.pages.IndexPage;
 import org.personal.myStore.core.pages.ItemAddedPage;
+import org.personal.myStore.core.pages.HeaderPage;
+import org.personal.myStore.core.pages.SearchPage;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
@@ -17,6 +19,8 @@ public class ShopsSteps {
     private BestSellersPage bestSellersPage;
     private ItemAddedPage itemAddedPage;
     private CartSummaryPage cartSummaryPage;
+    private HeaderPage headerPage = new HeaderPage();
+    private SearchPage searchPage;
 
     public ShopsSteps(IndexPage shopPage, BestSellersPage bestSellersPage) {
         this.shopPage = shopPage;
@@ -73,5 +77,22 @@ public class ShopsSteps {
     @And("The total amount to pay should be ${string}")
     public void theTotalAmountToPayShouldBe$(String totalPay) {
         Assert.assertEquals(cartSummaryPage.getTotalPay(), totalPay, "The total pay is not than expected");
+    }
+
+    @When("I type {string} on search field")
+    public void iTypeOnSearchField(String keyWordToSearch) {
+        searchPage = headerPage.searchFor(keyWordToSearch);
+    }
+
+    @Then("Only all items with {string} word on the product title should be displayed")
+    public void onlyAllItemsWithWordOnTheProductTitleShouldBeDisplayed(final String keyWordUsedOnSearch) {
+        List<String> products = searchPage.getSearchResult();
+
+        SoftAssert softAssert = new SoftAssert();
+        for (String productTitle : products) {
+            softAssert.assertTrue(productTitle.contains(keyWordUsedOnSearch),
+                    String.format("The product title: %s does not contains the keyword: %s", productTitle, keyWordUsedOnSearch));
+        }
+        softAssert.assertAll();
     }
 }

@@ -6,6 +6,6 @@ import org.personal.myStore.core.ui.driver.DriverManager;
 public class CommonHooks {
     @Before
     public void setUp() {
-        DriverManager.getInstance().getDriver().navigate().refresh();
+        DriverManager.getInstance().getDriver().navigate();
     }
 }
